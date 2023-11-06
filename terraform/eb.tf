@@ -2,10 +2,10 @@ resource "aws_elastic_beanstalk_application" "best-vulpy-app" {
   name = "best-vulpy" # The name of your existing Elastic Beanstalk application
 }
 
-import {
-  id = "best-vulpy"
-  to = aws_elastic_beanstalk_application.best-vulpy-app
-}
+# import {
+#   id = "best-vulpy"
+#   to = aws_elastic_beanstalk_application.best-vulpy-app
+# }
 
 data "external" "latest_python_stack" {
   program = ["./get_latest_solution_stack.sh"]

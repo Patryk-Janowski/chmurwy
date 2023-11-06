@@ -33,7 +33,7 @@ resource "aws_rds_cluster_instance" "aurora_db_isnstance" {
   engine              = aws_rds_cluster.aurora_cluster_eb.engine
   engine_version      = aws_rds_cluster.aurora_cluster_eb.engine_version
   publicly_accessible = true
-  identifier          = "aurora-db-instance-${each.key}"
+  identifier          = replace("aurora-db-instance-${each.key}", "_", "-")
 }
 
 resource "aws_db_subnet_group" "aurora_subnet_group" {
