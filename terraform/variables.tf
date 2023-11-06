@@ -17,3 +17,9 @@ variable "subnets" {
     db_2b      = { cidr_block = "10.0.6.0/24", availability_zone = "us-west-2b" }
   }
 }
+
+variable "eb_app_name" {
+  description = "The name of the Elastic Beanstalk app"
+  type        = string
+  default = "best-vulpy"
+}
