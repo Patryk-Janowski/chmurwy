@@ -22,58 +22,71 @@ resource "aws_iam_role_policy" "eb_ec2_policy" {
   role = aws_iam_role.eb_ec2_role.id
 
   policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "BucketAccess",
-            "Action": [
-                "s3:Get*",
-                "s3:List*",
-                "s3:PutObject"
-            ],
-            "Effect": "Allow",
-            "Resource": [
-                "arn:aws:s3:::elasticbeanstalk-${var.region}-${local.account_id}/${local.app_name}*"
-            ]
-        },
-        {
-            "Sid": "XRayAccess",
-            "Action": [
-                "xray:PutTraceSegments",
-                "xray:PutTelemetryRecords",
-                "xray:GetSamplingRules",
-                "xray:GetSamplingTargets",
-                "xray:GetSamplingStatisticSummaries"
-            ],
-            "Effect": "Allow",
-            "Resource": "*"
-        },
-        {
-            "Sid": "CloudWatchLogsAccess",
-            "Action": [
-                "logs:PutLogEvents",
-                "logs:CreateLogStream",
-                "logs:DescribeLogStreams",
-                "logs:DescribeLogGroups"
-            ],
-            "Effect": "Allow",
-            "Resource": [
-                "arn:aws:logs:*:*:log-group:/aws/elasticbeanstalk*"
-            ]
-        },
-        {
-            "Sid": "ElasticBeanstalkHealthAccess",
-            "Action": [
-                "elasticbeanstalk:PutInstanceStatistics"
-            ],
-            "Effect": "Allow",
-            "Resource": [
-                "arn:aws:elasticbeanstalk:*:*:application/*",
-                "arn:aws:elasticbeanstalk:*:*:environment/*"
-            ]
-        }
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "ListBucketAccess",
+        "Action" : [
+          "s3:List*",
+        ],
+        "Effect" : "Allow",
+        "Resource" : [
+          "arn:aws:s3:::elasticbeanstalk-${var.region}-${local.account_id}",
+        ]
+      },
+      {
+        "Sid" : "BucketAccess",
+        "Action" : [
+          "s3:GetObject",
+          "s3:PutObject"
+        ],
+        "Effect" : "Allow",
+        "Resource" : [
+          "arn:aws:s3:::elasticbeanstalk-${var.region}-${local.account_id}/*${local.app_name}*",
+          "arn:aws:s3:::elasticbeanstalk-${var.region}-${local.account_id}/*${var.eb_env_id}*",
+        ]
+      },
+      {
+        "Sid" : "XRayAccess",
+        "Action" : [
+          "xray:PutTraceSegments",
+          "xray:PutTelemetryRecords",
+          "xray:GetSamplingRules",
+          "xray:GetSamplingTargets",
+          "xray:GetSamplingStatisticSummaries"
+        ],
+        "Effect" : "Allow",
+        "Resource" : [
+          "*"
+          ]
+      },
+      {
+        "Sid" : "CloudWatchLogsAccess",
+        "Action" : [
+          "logs:PutLogEvents",
+          "logs:CreateLogStream",
+          "logs:DescribeLogStreams",
+          "logs:DescribeLogGroups"
+        ],
+        "Effect" : "Allow",
+        "Resource" : [
+          "arn:aws:logs:${var.region}:${local.account_id}:log-group:/aws/elasticbeanstalk/${local.app_name}*"
+        ]
+      },
+      {
+        "Sid" : "ElasticBeanstalkHealthAccess",
+        "Action" : [
+          "elasticbeanstalk:PutInstanceStatistics"
+        ],
+        "Effect" : "Allow",
+        "Resource" : [
+          "arn:aws:elasticbeanstalk:${var.region}:${local.account_id}:application/*${local.app_name}*",
+          "arn:aws:elasticbeanstalk:${var.region}:${local.account_id}:environment/*${local.app_name}*",
+          "arn:aws:elasticbeanstalk:${var.region}:${local.account_id}:environment/*${var.eb_env_id}*"
+        ]
+      }
     ]
-})
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "example_attach" {
