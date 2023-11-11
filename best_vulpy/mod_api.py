@@ -6,6 +6,7 @@ import libposts
 import libapi
 from jsonschema import validate, ValidationError
 import os
+import socket
 
 
 mod_api = Blueprint('mod_api', __name__, template_folder='templates')
@@ -35,21 +36,10 @@ post_schema = {
 def health_check():
     return jsonify({"status": "OK"}), 200
 
-@mod_api.route('/ip', methods=['GET'])
-def get_ip():
-    try:
-        # Request token for IMDSv2
-        token = requests.put('http://169.254.169.254/latest/api/token', 
-                             headers={'X-aws-ec2-metadata-token-ttl-seconds': '21600'}, 
-                             timeout=2).text
-        
-        # Using the token to retrieve instance's public IP
-        ip = requests.get('http://169.254.169.254/latest/meta-data/public-ipv4', 
-                          headers={'X-aws-ec2-metadata-token': token}, 
-                          timeout=2).text
-    except requests.RequestException as e:
-        ip = f"Unable to get IP: {str(e)}"
-    return jsonify(ip_address=ip)
+@mod_api.route('/hostname', methods=['GET'])
+def get_hostname():
+    hostname = socket.gethostname()
+    return jsonify(hostname=hostname)
 
 @mod_api.route('/key', methods=['POST'])
 def do_key_create():

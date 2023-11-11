@@ -21,5 +21,5 @@ variable "subnets" {
 variable "eb_app_name" {
   description = "The name of the Elastic Beanstalk app"
   type        = string
-  default = "best-vulpy"
+  default     = "best-vulpy"
 }

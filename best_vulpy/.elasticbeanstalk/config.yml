@@ -1,12 +1,12 @@
 branch-defaults:
   default:
-    environment: Best-vulpy-env
+    environment: best-vulpy-172rb5x5-env
 environment-defaults:
-  Best-vulpy-env:
+  best-vulpy-172rb5x5-env:
     branch: null
     repository: null
 global:
-  application_name: best-vulpy
+  application_name: best-vulpy-172rb5x5
   default_ec2_keyname: null
   default_platform: Python 3.9 running on 64bit Amazon Linux 2023
   default_region: us-west-2
