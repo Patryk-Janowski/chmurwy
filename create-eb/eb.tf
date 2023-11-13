@@ -2,11 +2,6 @@ resource "aws_elastic_beanstalk_application" "best-vulpy-app" {
   name = local.app_name # The name of your existing Elastic Beanstalk application
 }
 
-# import {
-#   id = "best-vulpy"
-#   to = aws_elastic_beanstalk_application.best-vulpy-app
-# }
-
 data "external" "latest_python_stack" {
   program = ["./get_latest_solution_stack.sh"]
 }
@@ -94,4 +89,71 @@ resource "aws_elastic_beanstalk_environment" "best-vulpy-env" {
     name      = "MaxSize"
     value     = "4"
   }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:sns:topics"
+    name      = "Notification Endpoint"
+    value     = "patryk_janowski@icloud.com"
+  }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:environment"
+    name      = "ServiceRole"
+    value     = "arn:aws:iam::758538809139:role/aws-elasticbeanstalk-service-role"
+  }
+
+  # setting {
+  #   namespace = "aws:elasticbeanstalk:xray"
+  #   name      = "XRayEnabled"
+  #   value     = "true"
+  # }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:managedactions"
+    name      = "PreferredStartTime"
+    value     = "SAT:00:00"
+  }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:managedactions:platformupdate"
+    name      = "UpdateLevel"
+    value     = "minor"
+  }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:command"
+    name      = "DeploymentPolicy"
+    value     = "Rolling"
+  }
+
+  setting {
+    namespace = "aws:autoscaling:updatepolicy:rollingupdate"
+    name      = "RollingUpdateEnabled"
+    value     = "true"
+  }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:cloudwatch:logs"
+    name      = "StreamLogs"
+    value     = "true"
+  }
+
+ setting {
+    namespace = "aws:elasticbeanstalk:environment"
+    name      = "LoadBalancerType"
+    value     = "application"
+  }
+
+ setting {
+    namespace = "aws:elasticbeanstalk:sns:topics"
+    name      = "Notification Protocol"
+    value     = "email"
+  }
+
+ setting {
+    namespace = "aws:elb:loadbalancer"
+    name      = "CrossZone"
+    value     = "true"
+  }
+
 }

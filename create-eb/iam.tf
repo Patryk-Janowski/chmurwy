@@ -1,5 +1,3 @@
-data "aws_caller_identity" "current" {}
-
 resource "aws_iam_role" "eb_ec2_role" {
   name = "eb-ec2-role-${local.app_name}"
 
@@ -15,6 +13,11 @@ resource "aws_iam_role" "eb_ec2_role" {
       },
     ]
   })
+}
+
+resource "aws_iam_instance_profile" "eb_instance_profile" {
+  name = "eb-instance-profile-${local.app_name}"
+  role = aws_iam_role.eb_ec2_role.name
 }
 
 resource "aws_iam_policy" "secret_policy" {
@@ -60,13 +63,6 @@ resource "aws_iam_role_policy_attachment" "smm_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
-
-resource "aws_iam_role_policy_attachment" "eb_attachment" {
-  role       = aws_iam_role.eb_ec2_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
-}
-
-
 resource "aws_iam_role_policy_attachment" "kms_attachment" {
   role       = aws_iam_role.eb_ec2_role.name
   policy_arn = aws_iam_policy.kms_policy.arn
@@ -76,9 +72,3 @@ resource "aws_iam_role_policy_attachment" "secret_attachment" {
   role       = aws_iam_role.eb_ec2_role.name
   policy_arn = aws_iam_policy.secret_policy.arn
 }
-
-resource "aws_iam_instance_profile" "eb_instance_profile" {
-  name = "eb-instance-profile-${local.app_name}"
-  role = aws_iam_role.eb_ec2_role.name
-}
-

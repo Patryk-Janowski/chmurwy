@@ -17,17 +17,11 @@ resource "aws_iam_role" "eb_ec2_role" {
   })
 }
 
-
 resource "aws_iam_role_policy_attachment" "smm_attachment" {
   role       = aws_iam_role.eb_ec2_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
-
-resource "aws_iam_role_policy_attachment" "eb_attachment" {
-  role       = aws_iam_role.eb_ec2_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
-}
 
 resource "aws_iam_instance_profile" "eb_instance_profile" {
   name = "eb-instance-profile-${local.app_name}"

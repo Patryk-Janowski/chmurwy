@@ -36,10 +36,12 @@ post_schema = {
 def health_check():
     return jsonify({"status": "OK"}), 200
 
+
 @mod_api.route('/hostname', methods=['GET'])
 def get_hostname():
     hostname = socket.gethostname()
-    return jsonify(hostname=hostname)
+    return jsonify(ec2_hostname=hostname)
+
 
 @mod_api.route('/key', methods=['POST'])
 def do_key_create():
