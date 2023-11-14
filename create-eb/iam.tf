@@ -72,3 +72,8 @@ resource "aws_iam_role_policy_attachment" "secret_attachment" {
   role       = aws_iam_role.eb_ec2_role.name
   policy_arn = aws_iam_policy.secret_policy.arn
 }
+
+resource "aws_iam_role_policy_attachment" "tmp_eb_attach" {
+  role       = aws_iam_role.eb_ec2_role.name
+  policy_arn = var.tmp_eb_policy_arn
+}

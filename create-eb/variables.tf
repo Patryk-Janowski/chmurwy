@@ -23,3 +23,9 @@ variable "eb_app_name" {
   type        = string
   default     = "best-vulpy"
 }
+
+variable "tmp_eb_policy_arn" {
+  description = "ARN of initial IAM policy for EB EC2 instances"
+  type = string
+  default = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
+}

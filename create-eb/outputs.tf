@@ -9,3 +9,7 @@ output "eb_env_id" {
 output "eb_role_name" {
   value = aws_iam_role.eb_ec2_role.name
 }
+
+output "policy_to_detach_arn" {
+  value = var.tmp_eb_policy_arn
+}

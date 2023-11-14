@@ -1,10 +1,4 @@
 data "aws_caller_identity" "current" {}
-# id = "arn:aws:iam::758538809139:policy/eb-ec2-policy-best-vulpy-pusgqpo9"
-
-# import {
-#   id = data.terraform_remote_state.eb_env_state.outputs.policy_to_detach_arn
-#   to = aws_iam_policy.eb_ec2_policy
-# }
 
 resource "aws_iam_policy" "secure_eb_ec2_policy" {
   name = "secure-eb-ec2-policy-${local.app_name}"
@@ -79,4 +73,7 @@ resource "aws_iam_policy" "secure_eb_ec2_policy" {
 resource "aws_iam_role_policy_attachment" "secure_eb_attach" {
   role       = local.eb_role_name
   policy_arn = aws_iam_policy.secure_eb_ec2_policy.arn
+  provisioner "local-exec" {
+    command = "aws iam detach-role-policy --role-name ${local.eb_role_name} --policy-arn ${local.policy_to_detach_arn}"
+  }
 }
