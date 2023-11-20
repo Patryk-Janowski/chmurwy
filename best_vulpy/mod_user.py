@@ -46,11 +46,12 @@ def do_create():
         password = request.form.get('password')
         email = request.form.get('password')
 
-        session['username'] = libuser.login(username, password)
+        session['username'] = libuser.user_create(username, password)
 
         if session['username']:
-            return redirect('/')
-
+            flash("User created. Please login.")
+            return redirect('/user/login')
+    
     return render_template('user.create.html')
 
 
